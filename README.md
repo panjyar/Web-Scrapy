@@ -1,1 +1,1 @@
-# Web-Scrapy
+# Scraping all AICTC Website
