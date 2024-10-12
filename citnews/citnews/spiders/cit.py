@@ -27,13 +27,12 @@ class CitSpider(scrapy.Spider):
     def parse_nits(self, response):
         self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF NITS----------------------------------------------------')
         
-        # Update the CSS selector if necessary
+       
         for news_item in response.css('marquee a'):
             latestNewsitems = NITSItems()
             
-            # Fix the method to extract the href attribute
             latestNews = news_item.css('::text').get()
-            latestNewsUrl = news_item.css('::attr(href)').get()  # Corrected this line
+            latestNewsUrl = news_item.css('::attr(href)').get()  
 
             latestNewsitems['latestNews'] = latestNews.strip() if latestNews else None
             latestNewsitems['latestNewsUrl'] = response.urljoin(latestNewsUrl) if latestNewsUrl else None
