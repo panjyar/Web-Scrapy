@@ -1,19 +1,7 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
-# useful for handling different item types with a single interface
-# from itemadapter import ItemAdapter
-
-
-# class CitnewsPipeline:
-#     def process_item(self, item, spider):
-#         return item
-
 import pymongo
-
+from .items import CitnewsItem
+from .items import IITGnewsItem
+from .items import NITSItems
 class MongoDBPipeline:
 
     def __init__(self, mongo_uri, mongo_db):
@@ -38,7 +26,20 @@ class MongoDBPipeline:
         self.client.close()
 
     def process_item(self, item, spider):
-        # Insert the item into the MongoDB collection
+        # Define the collection name based on the item's class name
         collection_name = item.__class__.__name__.lower()
-        self.db[collection_name].insert_one(dict(item))
+        
+        # Set up unique identifiers based on the item class to prevent duplicates
+        if isinstance(item, CitnewsItem):
+            query = {'newslink': item.get('newslink')} if item.get('newslink') else {'noticeUrl': item.get('noticeUrl')}
+        elif isinstance(item, IITGnewsItem):
+            query = {'newslink': item.get('newslink')}
+        elif isinstance(item, NITSItems):
+            query = {'latestNewsurlnits': item.get('latestNewsurlnits')}
+        else:
+            query = {}
+
+        # Use upsert to insert the item if it does not exist, or update if it does
+        self.db[collection_name].update_one(query, {'$set': dict(item)}, upsert=True)
+        
         return item

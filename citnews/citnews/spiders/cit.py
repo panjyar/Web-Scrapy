@@ -11,7 +11,7 @@ class CitSpider(scrapy.Spider):
 
 
     def parse(self, response):
-        # Uncomment and adjust if you want to scrape the CIT website
+        
         if "cit.ac.in" in response.url:
             self.logger.info('------------------------SCRAPPING CIT WEBSITE-----------------------------')
             yield from self.parse_cit(response)
@@ -31,11 +31,11 @@ class CitSpider(scrapy.Spider):
         for news_item in response.css('marquee a'):
             latestNewsitems = NITSItems()
             
-            latestNews = news_item.css('::text').get()
-            latestNewsUrl = news_item.css('::attr(href)').get()  
+            news = news_item.css('::text').get()
+            newslink = news_item.css('::attr(href)').get()  
 
-            latestNewsitems['latestNews'] = latestNews.strip() if latestNews else None
-            latestNewsitems['latestNewsUrl'] = response.urljoin(latestNewsUrl) if latestNewsUrl else None
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink) if newslink else None
 
             yield latestNewsitems
 
@@ -81,11 +81,11 @@ class CitSpider(scrapy.Spider):
         self.logger.info('---------Scrapping Latest News of IITG ---------')
         for news_item in response.css('div#bn7 a'):
             latestNewsitems = IITGnewsItem()
-            latestNewstitle = news_item.css('::text').get()
-            latestNewsurl = news_item.css('::attr(href)').get()
+            news = news_item.css('::text').get()
+            newslink = news_item.css('::attr(href)').get()
 
-            latestNewsitems['latestNewstitle'] = latestNewstitle.strip() if latestNewstitle else None
-            latestNewsitems['latestNewsurl'] = response.urljoin(latestNewsurl)
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink)
             yield latestNewsitems
 
         self.logger.info('----------------------Scrapping Upcoming event of IITG  ----------------------------')
@@ -171,11 +171,11 @@ class CitSpider(scrapy.Spider):
             yield noticeitems
 
         
-        if response.url != 'https://www.cit.ac.in/pages-notices-all':
-            yield response.follow('https://www.cit.ac.in/pages-notices-all', self.parse_notices)
+        # if response.url != 'https://www.cit.ac.in/pages-notices-all':
+        #     yield response.follow('https://www.cit.ac.in/pages-notices-all', self.parse_notices)
 
         self.logger.info('----------------Scrapping Tender--------------- ')
-        for tender in response.css('div#tab1 a'):
+        for tender in response.css('div#tab2 > ul.list li a'):
             tenderitems = CitnewsItem()
             tenderTitle = tender.css('::text').get()
             tenderUrl = tender.css('::attr(href)').get()
@@ -183,8 +183,8 @@ class CitSpider(scrapy.Spider):
             tenderitems['tenderTitle'] = tenderTitle.strip() if tenderTitle else None
             tenderitems['tenderUrl'] = response.urljoin(tenderUrl)
             yield tenderitems
-        if response.url != 'https://www.cit.ac.in/pages-tenders-all':
-            yield response.follow('https://www.cit.ac.in/pages-tenders-all', self.parse_tender)
+        # if response.url != 'https://www.cit.ac.in/pages-tenders-all':
+        #     yield response.follow('https://www.cit.ac.in/pages-tenders-all', self.parse_tender)
         
         self.logger.info('-----------------------------------Upcoming Events------------------------------------------------------')
         for event in response.css('div.mb-15.bg-white'):

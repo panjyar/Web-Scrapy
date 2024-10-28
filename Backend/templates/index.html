@@ -3,27 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Display</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>CIT News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>News from CIT, IITG, and NITS</h1>
 
-    <div id="cit-news" class="news-container">
-        <h2>CIT News</h2>
-        <ul id="cit-news-list"></ul>
-    </div>
+<h1>CIT News and Updates</h1>
 
-    <div id="iitg-news" class="news-container">
-        <h2>IITG News</h2>
-        <ul id="iitg-news-list"></ul>
-    </div>
+<!-- CIT News Table -->
+<h2>CIT News</h2>
+<table id="citNewsTable">
+    <thead>
+        <tr>
+            <th>News Title</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dynamic content will be inserted here -->
+    </tbody>
+</table>
 
-    <div id="nits-news" class="news-container">
-        <h2>NITS News</h2>
-        <ul id="nits-news-list"></ul>
-    </div>
+<!-- Notices Table -->
+<h2>Notices</h2>
+<table id="noticesTable">
+    <thead>
+        <tr>
+            <th>Notice Title</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dynamic content will be inserted here -->
+    </tbody>
+</table>
 
-    <script src="script.js"></script>
+<!-- Tenders Table -->
+<h2>Tenders</h2>
+<table id="tendersTable">
+    <thead>
+        <tr>
+            <th>Tender Title</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dynamic content will be inserted here -->
+    </tbody>
+</table>
+
+<!-- Latest News Table -->
+<h2>Latest News</h2>
+<table id="latestNewsTable">
+    <thead>
+        <tr>
+            <th>Latest News Title</th>
+            <th>Date</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dynamic content will be inserted here -->
+    </tbody>
+</table>
+
+<script src="../static/scripts.js"></script>
 </body>
 </html>

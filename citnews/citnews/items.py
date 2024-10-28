@@ -20,20 +20,20 @@ class CitnewsItem(scrapy.Item):
 
 class IITGnewsItem(scrapy.Item):
     # define the fields for your item here like:
-    latestNewstitle = scrapy.Field()
-    latestNewsurl = scrapy.Field()
+    news = scrapy.Field()
+    newslink = scrapy.Field()
     eventName = scrapy.Field()
     eventDate = scrapy.Field()
     eventInfo = scrapy.Field()
     # tenderTitle = scrapy.Field()
-    eventName = scrapy.Field()
-    eventDate = scrapy.Field()
-    eventInfo = scrapy.Field()
+    
+    
+    
     
 
 class NITSItems(scrapy.Item):
-    latestNews = scrapy.Field()
-    latestNewsUrl = scrapy.Field()
+    news = scrapy.Field()
+    newslink = scrapy.Field()
     latestNewstitlenits = scrapy.Field()
     latestNewsurlnits = scrapy.Field()
 
