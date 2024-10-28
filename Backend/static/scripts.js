@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetchAllNews();
+    fetchNITSilchar(); // Make sure to fetch NITS news independently
 });
 
 function fetchAllNews() {
@@ -17,7 +18,6 @@ function categorizeNews(data) {
     const tendersTableBody = document.getElementById('tendersTable').querySelector('tbody');
     const latestNewsTableBody = document.getElementById('latestNewsTable').querySelector('tbody');
 
-    // Populate CIT News Title Section
     data.citNews.forEach(item => {
         // Display main news
         if (item.news) {
@@ -46,12 +46,25 @@ function categorizeNews(data) {
             latestNewsRow.innerHTML = `<td>${item.eventName}</td> <td>${item.eventDate}</td> <td><a href="${item.eventInfo}" target="_blank">Link</a></td>`;
             latestNewsTableBody.appendChild(latestNewsRow);
         }
+    });
+}
 
-        // Display Latest News from NITs
-        if (item.latestNewstitlenits) {
-            const latestNitsRow = document.createElement('tr');
-            latestNitsRow.innerHTML = `<td>${item.latestNewstitlenits}</td><td><a href="${item.latestNewsurlnits}" target="_blank">Link</a></td>`;
-            latestNewsTableBody.appendChild(latestNitsRow);
+function fetchNITSilchar() {
+    fetch('/api/nitsnews') // Fetching NITS news from the API
+        .then(response => response.json())
+        .then(data => {
+            displayNITSilcharNews(data);
+        })
+        .catch(error => console.error('Error fetching NITS news:', error));
+}
+
+function displayNITSilcharNews(data) {
+    const NITSNewsTableBody = document.getElementById('nitsilcharNewsTable').querySelector('tbody');
+    data.forEach(item => {
+        if (item.news) {
+            const newsRow = document.createElement('tr');
+            newsRow.innerHTML = `<td>${item.news}</td><td><a href="${item.newslink}" target="_blank">Link</a></td>`;
+            NITSNewsTableBody.appendChild(newsRow);
         }
     });
 }

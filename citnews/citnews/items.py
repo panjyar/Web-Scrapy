@@ -34,7 +34,4 @@ class IITGnewsItem(scrapy.Item):
 class NITSItems(scrapy.Item):
     news = scrapy.Field()
     newslink = scrapy.Field()
-    latestNewstitlenits = scrapy.Field()
-    latestNewsurlnits = scrapy.Field()
-
     pass

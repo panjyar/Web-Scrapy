@@ -33,9 +33,9 @@ class MongoDBPipeline:
         if isinstance(item, CitnewsItem):
             query = {'newslink': item.get('newslink')} if item.get('newslink') else {'noticeUrl': item.get('noticeUrl')}
         elif isinstance(item, IITGnewsItem):
-            query = {'newslink': item.get('newslink')}
+            query = {'news': item.get('newslink')}
         elif isinstance(item, NITSItems):
-            query = {'latestNewsurlnits': item.get('latestNewsurlnits')}
+            query = {'news': item.get('newslink')}
         else:
             query = {}
 

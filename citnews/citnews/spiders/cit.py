@@ -42,40 +42,40 @@ class CitSpider(scrapy.Spider):
         self.logger.info('---------Scrapping Latest News of NITS ---------')
         for news_item in response.css('div.newsupdatesmargin b'):
             latestNewsitems = NITSItems()
-            latestNewstitlenits = news_item.css('a::text').get()
-            latestNewsurlnits = news_item.css('a::attr(href)').get()
+            news = news_item.css('a::text').get()
+            newslink = news_item.css('a::attr(href)').get()
 
-            latestNewsitems['latestNewstitlenits'] = latestNewstitlenits.strip() if latestNewstitlenits else None
-            latestNewsitems['latestNewsurlnits'] = response.urljoin(latestNewsurlnits)
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink)
             yield latestNewsitems 
-        if response.url != 'http://www.nits.ac.in/newsupdates.php':
-                yield response.follow('http://www.nits.ac.in/newsupdates.php', self.newsUpdatesnits)
+        # if response.url != 'http://www.nits.ac.in/newsupdates.php':
+        #         yield response.follow('http://www.nits.ac.in/newsupdates.php', self.newsUpdatesnits)
     
     def newsUpdatesnits(self, response):
         self.logger.info('----------------Scrapping Latest News of NITS (All Page)--------------- ')
         for news_item in response.css('div.panel-border  b a'):
             latestNewsitems = NITSItems()
-            latestNewstitlenits = news_item.css('::text').get()
-            latestNewsurlnits = news_item.css('::attr(href)').get()
+            news = news_item.css('::text').get()
+            newslink = news_item.css('::attr(href)').get()
 
-            latestNewsitems['latestNewstitlenits'] = latestNewstitlenits.strip() if latestNewstitlenits else None
-            latestNewsitems['latestNewsurlnits'] = response.urljoin(latestNewsurlnits)
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink)
             yield latestNewsitems
         
         self.logger.info('----------------Scrapping Notice--------------- ')
     
         for notice in response.css('div#tab1 a'):
             latestNewsitems = NITSItems()
-            latestNewstitlenits = news_item.css('a::text').get()
-            latestNewsurlnits = news_item.css('a::attr(href)').get()
+            news = news_item.css('a::text').get()
+            newslink = news_item.css('a::attr(href)').get()
 
-            latestNewsitems['latestNewstitlenits'] = latestNewstitlenits.strip() if latestNewstitlenits else None
-            latestNewsitems['latestNewsurlnits'] = response.urljoin(latestNewsurlnits)
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink)
             yield latestNewsitems
 
         
-        if response.url != 'http://www.nits.ac.in/newsupdates.php':
-            yield response.follow('http://www.nits.ac.in/newsupdates.php', self.newsUpdatesnits)
+        # if response.url != 'http://www.nits.ac.in/newsupdates.php':
+        #     yield response.follow('http://www.nits.ac.in/newsupdates.php', self.newsUpdatesnits)
 
     def parse_iitg(self, response):
         self.logger.info('---------Scrapping Latest News of IITG ---------')
@@ -175,7 +175,7 @@ class CitSpider(scrapy.Spider):
         #     yield response.follow('https://www.cit.ac.in/pages-notices-all', self.parse_notices)
 
         self.logger.info('----------------Scrapping Tender--------------- ')
-        for tender in response.css('div#tab2 > ul.list li a'):
+        for tender in response.css('div#tab2 > ul li a'):
             tenderitems = CitnewsItem()
             tenderTitle = tender.css('::text').get()
             tenderUrl = tender.css('::attr(href)').get()
