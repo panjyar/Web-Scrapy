@@ -3,31 +3,35 @@ from pymongo import MongoClient  # type: ignore
 
 app = Flask(__name__)
 
-# Initialize MongoDB Client
-client = MongoClient('mongodb://localhost:27017/') 
-db = client['cit_scrapy']  
+client = MongoClient('mongodb://localhost:27017/')
+db = client['All_college']
 
-# Route to serve the main HTML page
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Route to fetch all categorized news items
-@app.route('/api/news', methods=['GET'])
+@app.route('/api/all', methods=['GET'])
 def get_all_news():
-    # Fetch data from different collections
-    cit_news = list(db['citnewsitem'].find({}, {'_id': 0}))
-    iitg_news = list(db['iitgnewsitem'].find({}, {'_id': 0}))
-    nits_news = list(db['nitsitems'].find({}, {'_id': 0}))
+    try:
+        # Fetch data from different collections
+        news = list(db['news'].find({}, {'_id': 0}))
+        upcoming_events = list(db['upcoming_events'].find({}, {'_id': 0}))  
+        notices = list(db['notices'].find({}, {'_id': 0}))  
+        tenders = list(db['tenders'].find({}, {'_id': 0}))  
 
-    # Combine all data into a structured format
-    all_news = {
-        "citNews": cit_news,
-        "iitgNews": iitg_news,
-        "nitsNews": nits_news
-    }
+        # Combine all data into a structured format
+        all_news = {
+            "News": news,
+            "UpcomingEvents": upcoming_events,
+            "Notices": notices,
+            "Tenders": tenders
+        }
 
-    return jsonify(all_news)
+        return jsonify(all_news)
+
+    except Exception as e:
+        app.logger.error(f"Error fetching data: {e}")
+        return jsonify({"error": "An error occurred while fetching data"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

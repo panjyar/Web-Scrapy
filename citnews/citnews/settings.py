@@ -69,7 +69,7 @@ ROBOTSTXT_OBEY = True
 
 # MongoDB connection details
 MONGO_URI = 'mongodb://localhost:27017'
-MONGO_DATABASE = 'cit_scrapy'
+MONGO_DATABASE = 'All_college'
 
 # Enable the pipeline
 ITEM_PIPELINES = {

@@ -4,10 +4,11 @@ from datetime import datetime
 from ..items import CitnewsItem
 from ..items import IITGnewsItem
 from ..items import NITSItems
+from ..items import NITAItems
 class CitSpider(scrapy.Spider):
     name = "cit"
-    allowed_domains = ["cit.ac.in" , "iitg.ac.in" , "nits.ac.in"]
-    start_urls = ["https://cit.ac.in" , "https://iitg.ac.in" , "http://www.nits.ac.in/"]
+    allowed_domains = ["cit.ac.in" , "iitg.ac.in" , "nits.ac.in" , "nita.ac.in"]
+    start_urls = ["https://cit.ac.in" , "https://iitg.ac.in" , "http://www.nits.ac.in/" , "https://www.nita.ac.in/"]
 
 
     def parse(self, response):
@@ -23,7 +24,41 @@ class CitSpider(scrapy.Spider):
         elif "nits.ac.in" in response.url:
             self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
             yield from self.parse_nits(response)
+        elif "nita.ac.in" in response.url:
+            self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
+            yield from self.parse_nita(response)
     
+    def parse_nita(self, response):
+        self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF NIT AGARTALA----------------------------------------------------')
+        
+       
+        for news_item in response.css('myTicker a'): 
+            latestNewsitems = NITAItems()
+            
+            news = news_item.css('::text').get()
+            newslink = news_item.css('::attr(href)').get()  
+
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink) if newslink else None
+
+            yield latestNewsitems
+
+        # self.logger.info('---------Scrapping Latest News of NITS ---------')
+        # for news_item in response.css('div.newsupdatesmargin b'):
+        #     latestNewsitems = NITSItems()
+        #     news = news_item.css('a::text').get()
+        #     newslink = news_item.css('a::attr(href)').get()
+
+        #     latestNewsitems['news'] = news.strip() if news else None
+        #     latestNewsitems['newslink'] = response.urljoin(newslink)
+        #     yield latestNewsitems 
+        # if response.url != 'http://www.nits.ac.in/newsupdates.php':
+        #         yield response.follow('http://www.nits.ac.in/newsupdates.php', self.newsUpdatesnits)
+    
+
+
+
+
     def parse_nits(self, response):
         self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF NITS----------------------------------------------------')
         

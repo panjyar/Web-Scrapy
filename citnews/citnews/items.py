@@ -34,4 +34,7 @@ class IITGnewsItem(scrapy.Item):
 class NITSItems(scrapy.Item):
     news = scrapy.Field()
     newslink = scrapy.Field()
+class NITAItems(scrapy.Item):
+    news = scrapy.Field()
+    newslink = scrapy.Field()
     pass
