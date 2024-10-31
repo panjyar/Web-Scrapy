@@ -37,4 +37,14 @@ class NITSItems(scrapy.Item):
 class NITAItems(scrapy.Item):
     news = scrapy.Field()
     newslink = scrapy.Field()
+    eventName = scrapy.Field()
+    eventDate = scrapy.Field()
+    eventInfo = scrapy.Field()
+class IITDItems(scrapy.Item):
+    news = scrapy.Field()
+    newslink = scrapy.Field()
+    eventName = scrapy.Field()
+    eventDate = scrapy.Field()
+    eventInfo = scrapy.Field()
+
     pass

@@ -5,36 +5,42 @@ from ..items import CitnewsItem
 from ..items import IITGnewsItem
 from ..items import NITSItems
 from ..items import NITAItems
+from ..items import IITDItems
 class CitSpider(scrapy.Spider):
     name = "cit"
-    allowed_domains = ["cit.ac.in" , "iitg.ac.in" , "nits.ac.in" , "nita.ac.in"]
-    start_urls = ["https://cit.ac.in" , "https://iitg.ac.in" , "http://www.nits.ac.in/" , "https://www.nita.ac.in/"]
+    allowed_domains = ["cit.ac.in" , "iitg.ac.in" , "nits.ac.in" , "nita.ac.in" , "home.iitd.ac.in/"]
+    start_urls = ["https://cit.ac.in" , "https://iitg.ac.in" , "http://www.nits.ac.in/" , "https://www.nita.ac.in/" , "https://home.iitd.ac.in/"]
 
 
     def parse(self, response):
         
-        if "cit.ac.in" in response.url:
-            self.logger.info('------------------------SCRAPPING CIT WEBSITE-----------------------------')
-            yield from self.parse_cit(response)
+        if "iitd.ac.in" in response.url:
+            self.logger.info('------------------------------SCRAPPING IIT Delhi  WEBSITE---------------------------------')
+            yield from self.parse_iitd(response)
+        
+        # elif "nita.ac.in" in response.url:
+        #     self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
+        #     yield from self.parse_nita(response)
+        
+        # elif "cit.ac.in" in response.url:
+        #     self.logger.info('------------------------SCRAPPING CIT WEBSITE-----------------------------')
+        #     yield from self.parse_cit(response)
 
-        elif "iitg.ac.in" in response.url:
-            self.logger.info('--------------------------------SCRAPPING IITG WEBSITE-------------------------------------------')
-            yield from self.parse_iitg(response)
+        # elif "iitg.ac.in" in response.url:
+        #     self.logger.info('--------------------------------SCRAPPING IITG WEBSITE-------------------------------------------')
+        #     yield from self.parse_iitg(response)
 
-        elif "nits.ac.in" in response.url:
-            self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
-            yield from self.parse_nits(response)
-        elif "nita.ac.in" in response.url:
-            self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
-            yield from self.parse_nita(response)
-    
-    def parse_nita(self, response):
-        self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF NIT AGARTALA----------------------------------------------------')
+        # elif "nits.ac.in" in response.url:
+        #     self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
+        #     yield from self.parse_nits(response)
+        
+    def parse_iitd(self, response):
+        self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF IIT Delhi----------------------------------------------------')
         
        
-        for news_item in response.css('myTicker a'): 
-            latestNewsitems = NITAItems()
-            
+        def extract_news_items(news_item):
+            """ Helper function to extract news and news link from a news item. """
+            latestNewsitems = IITDItems()
             news = news_item.css('::text').get()
             newslink = news_item.css('::attr(href)').get()  
 
@@ -42,23 +48,87 @@ class CitSpider(scrapy.Spider):
             latestNewsitems['newslink'] = response.urljoin(newslink) if newslink else None
 
             yield latestNewsitems
+            print("Extracted News for IIT Delhi:", news)
+            print("Extracted IIT Delhi Link:", newslink)
 
-        # self.logger.info('---------Scrapping Latest News of NITS ---------')
-        # for news_item in response.css('div.newsupdatesmargin b'):
-        #     latestNewsitems = NITSItems()
-        #     news = news_item.css('a::text').get()
-        #     newslink = news_item.css('a::attr(href)').get()
+        
+        for news_item in response.css('#courses div.row a'):
+            yield from extract_news_items(news_item)
+        # Startups News
+        for news_item in response.css('#startups h4 a'): 
+            yield from extract_news_items(news_item)
+        # Latest News
+        for news_item in response.css('#news .col-md-8 h4 a'): 
+            yield from extract_news_items(news_item)
+        # Research
+        for news_item in response.css('#research .col-md-8 h4 a'): 
+            yield from extract_news_items(news_item)
+        self.logger.info('----------------------Scrapping Upcoming event of  IIT Delhi ----------------------------')
 
-        #     latestNewsitems['news'] = news.strip() if news else None
-        #     latestNewsitems['newslink'] = response.urljoin(newslink)
-        #     yield latestNewsitems 
-        # if response.url != 'http://www.nits.ac.in/newsupdates.php':
-        #         yield response.follow('http://www.nits.ac.in/newsupdates.php', self.newsUpdatesnits)
+        for event in response.css('div.info p '):
+            eventitems = IITDItems()
+
+            eventName = event.css('a::text').get()
+            eventDate = event.css(' li::text').get()
+            eventInfo = event.css('a::attr(href)').get()
+
+            # Extract date from eventDate and convert to datetime object
+            if eventDate:
+                try:
+                    # Extract just the date part from the string
+                    date_str = eventDate.strip().replace('')
+                    event_date_obj = datetime.strptime(date_str, '%b %d, %Y')  # Format: Nov 25, 2015
+                    current_date = datetime.now()
+                    end_date = datetime(2025, 12, 31)
+
+                    # Check if the event date is within the specified range
+                    if current_date <= event_date_obj <= end_date:
+                        eventitems['eventName'] = eventName.strip() if eventName else None
+                        eventitems['eventDate'] = eventDate.strip()
+                        eventitems['eventInfo'] = response.urljoin(eventInfo) if eventInfo else None
+                        yield eventitems
+                except ValueError:
+                    self.logger.warning(f"Could not parse event date: {eventDate.strip()}")
+
+    def parse_nita(self, response):
+        self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF NIT AGARTALA----------------------------------------------------')
+        
+       
+        for news_item in response.css('div.news_card'): 
+            latestNewsitems = NITAItems()
+            
+            news = news_item.css('a::text').get()
+            newslink = news_item.css('a::attr(href)').get()  
+
+            latestNewsitems['news'] = news.strip() if news else None
+            latestNewsitems['newslink'] = response.urljoin(newslink) if newslink else None
+
+            yield latestNewsitems
+            print("Extracted News for NIT Agartala" , news)
+            print("Extracted Linkn:" , newslink)
+
+        self.logger.info('----------------------Scrapping Upcoming event of  NIT AGARTALA  ----------------------------')
+
+        for event in response.css('div.event_box'):
+            eventitems = NITAItems()
+
+            day = event.css('div.d-flex > p.mb-0::text').get().strip()
+            month = event.css('div.d-flex > p.mb-0 > span::text').get().strip()
+            year = event.css('div.d-flex > p.mb-0::text').re_first(r'\d{4}')
+            eventName = event.css('div.event_box > a::text').get()
+            eventInfo = event.css('div.event_box > a::attr(href)').get()
+
+            eventDate = f"{month} {day}, {year}" if day and month and year else None
+        
+            eventitems['eventDate'] = eventDate  
+            eventitems['eventName'] = eventName
+            eventitems['eventInfo'] = response.urljoin(eventInfo) if eventInfo else None
+            
+            yield eventitems
+            print("Extracted Event Date:", eventDate)
+            print("Extracted Event Title:", eventName)
+            print("Event Link:", eventInfo)
     
-
-
-
-
     def parse_nits(self, response):
         self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF NITS----------------------------------------------------')
         
@@ -136,7 +206,7 @@ class CitSpider(scrapy.Spider):
             if eventDate:
                 try:
                     # Extract just the date part from the string
-                    date_str = eventDate.strip().replace('Date: ', '')
+                    date_str = eventDate.strip().replace('')
                     event_date_obj = datetime.strptime(date_str, '%b %d, %Y')  # Format: Nov 25, 2015
                     current_date = datetime.now()
                     end_date = datetime(2025, 12, 31)
@@ -150,8 +220,8 @@ class CitSpider(scrapy.Spider):
                 except ValueError:
                     self.logger.warning(f"Could not parse event date: {eventDate.strip()}")
 
-        if response.url != 'https://iitg.ac.in/iitg_events_all':
-            yield response.follow('https://iitg.ac.in/iitg_events_all', self.parse_upcommingEventOfIITG)
+        # if response.url != 'https://iitg.ac.in/iitg_events_all':
+        #     yield response.follow('https://iitg.ac.in/iitg_events_all', self.parse_upcommingEventOfIITG)
 
     def parse_upcommingEventOfIITG(self, response):
         self.logger.info('----------------------Scrapping Upcoming event of IITG (All PAGE) ----------------------------')
