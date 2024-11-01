@@ -34,4 +34,4 @@ def get_all_news():
         return jsonify({"error": "An error occurred while fetching data"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
