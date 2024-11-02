@@ -18,21 +18,21 @@ class CitSpider(scrapy.Spider):
             self.logger.info('------------------------------SCRAPPING IIT Delhi  WEBSITE---------------------------------')
             yield from self.parse_iitd(response)
         
-        # elif "nita.ac.in" in response.url:
-        #     self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
-        #     yield from self.parse_nita(response)
+        elif "nita.ac.in" in response.url:
+            self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
+            yield from self.parse_nita(response)
         
-        # elif "cit.ac.in" in response.url:
-        #     self.logger.info('------------------------SCRAPPING CIT WEBSITE-----------------------------')
-        #     yield from self.parse_cit(response)
+        elif "cit.ac.in" in response.url:
+            self.logger.info('------------------------SCRAPPING CIT WEBSITE-----------------------------')
+            yield from self.parse_cit(response)
 
-        # elif "iitg.ac.in" in response.url:
-        #     self.logger.info('--------------------------------SCRAPPING IITG WEBSITE-------------------------------------------')
-        #     yield from self.parse_iitg(response)
+        elif "iitg.ac.in" in response.url:
+            self.logger.info('--------------------------------SCRAPPING IITG WEBSITE-------------------------------------------')
+            yield from self.parse_iitg(response)
 
-        # elif "nits.ac.in" in response.url:
-        #     self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
-        #     yield from self.parse_nits(response)
+        elif "nits.ac.in" in response.url:
+            self.logger.info('------------------------------SCRAPPING NITS WEBSITE---------------------------------')
+            yield from self.parse_nits(response)
         
     def parse_iitd(self, response):
         self.logger.info('-------------------------------------------  SCRAPPING LATEST NEWS OF IIT Delhi----------------------------------------------------')

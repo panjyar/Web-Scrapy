@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+import os
+
 # Scrapy settings for citnews project
 #
 # For simplicity, this file contains only settings considered important or
@@ -68,7 +71,9 @@ ROBOTSTXT_OBEY = True
 # settings.py
 
 # MongoDB connection details
-MONGO_URI = 'mongodb://localhost:27017'
+
+load_dotenv()
+MONGO_URI = os.getenv('MONGO_URI')
 MONGO_DATABASE = 'All_college'
 
 # Enable the pipeline

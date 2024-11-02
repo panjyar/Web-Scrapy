@@ -1,9 +1,16 @@
 from flask import Flask, jsonify, render_template
 from pymongo import MongoClient  # type: ignore
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb://localhost:27017/')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+mongo_uri= os.getenv('MONGO_URL')
+client = MongoClient(mongo_uri)
 db = client['All_college']
 
 @app.route('/')
