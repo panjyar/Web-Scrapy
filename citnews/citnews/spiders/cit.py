@@ -235,7 +235,7 @@ class CitSpider(scrapy.Spider):
             if eventDate:
                 try:
                     # Extract just the date part from the string
-                    date_str = eventDate.strip().replace('Date: ', '')
+                    date_str = eventDate.strip().replace('')
                     event_date_obj = datetime.strptime(date_str, '%b %d, %Y')  # Format: Nov 25, 2015
                     current_date = datetime.now()
                     end_date = datetime(2025, 12, 31)
