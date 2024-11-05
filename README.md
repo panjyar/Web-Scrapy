@@ -23,7 +23,7 @@ Install Dependencies
 Install the required packages for Flask and Scrapy:
 ```
 pip install -r requirements_flask.txt
-pip install -r requirements_Scrapy.txt
+pip install -r requirements_scrapy.txt
 ```
 Configure MongoDB Connection
 Update the MongoDB connection settings as follows:
