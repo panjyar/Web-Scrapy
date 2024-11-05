@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #dddddd;
+    background-color: #ffffff;
     color: #333;
 }
 h1, h2 {
@@ -11,7 +11,6 @@ h1, h2 {
     font-weight: 700;
 }
 
-/* Table Styling */
 .news-table {
     width: 100%;
     margin-bottom: 20px;
@@ -32,7 +31,7 @@ th {
     font-weight: bold;
 }
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #e0e0e0;
 }
 td a {
     color: #007BFF;
@@ -43,7 +42,6 @@ td a:hover {
     text-decoration: underline;
 }
 
-/* Image Styling */
 .image-placeholder {
     width: 60px;
     height: 60px;
@@ -55,7 +53,6 @@ td a:hover {
     background-position: center;
 }
 
-/* Responsive Styling */
 @media (max-width: 768px) {
     body {
         padding: 10px;
